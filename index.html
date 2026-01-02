@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Demo Casino — Dark UI</title>
+  <style>
+    :root{
+      --bg:#0b0c0e;--panel:#121315;--panel2:#17181b;--line:#2a2c32;
+      --text:rgba(255,255,255,.92);--muted:rgba(255,255,255,.62);
+      --green:#22c55e;--violet:#7c3aed;--shadow:0 18px 50px rgba(0,0,0,.55);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 650px at 35% 0%, rgba(124,58,237,.20), transparent 60%),
+        radial-gradient(900px 650px at 90% 10%, rgba(34,197,94,.10), transparent 55%),
+        var(--bg);
+    }
+    a{color:inherit;text-decoration:none}
+    .shell{display:grid;grid-template-columns:76px 1fr;min-height:100vh}
+    @media (min-width:980px){.shell{grid-template-columns:260px 1fr}}
+    .sidebar{
+      position:sticky; top:0; height:100vh;
+      background:linear-gradient(180deg, rgba(18,19,21,.85), rgba(12,12,14,.92));
+      border-right:1px solid rgba(42,44,50,.7);
+      padding:14px 12px;
+      overflow:auto;
+    }
+    .sbMini{display:flex;flex-direction:column;gap:10px;align-items:center}
+    @media (min-width:980px){.sbMini{display:none}}
+    .sbFull{display:none}
+    @media (min-width:980px){.sbFull{display:block}}
+
+    .brand{display:flex;align-items:center;gap:10px;font-weight:900;margin:6px 6px 14px}
+    .brandMark{width:10px;height:10px;border-radius:3px;background:var(--green);box-shadow:0 0 0 6px rgba(34,197,94,.12)}
+    .brandName{font-size:22px;letter-spacing:.2px}.brandName span{color:var(--green)}
+
+    .sbItem{
+      display:flex;align-items:center;gap:10px;
+      padding:12px 12px;border-radius:14px;
+      color:rgba(255,255,255,.82);
+      border:1px solid transparent;
+    }
+    .sbItem:hover{background:rgba(255,255,255,.04);border-color:rgba(42,44,50,.7)}
+    .sbItem.active{
+      background:linear-gradient(90deg, rgba(124,58,237,.22), rgba(34,197,94,.10));
+      border-color:rgba(124,58,237,.28)
+    }
+    .sbIcon{
+      width:26px;height:26px;border-radius:8px;background:rgba(255,255,255,.06);
+      display:flex;align-items:center;justify-content:center;
+      border:1px solid rgba(42,44,50,.8);
+    }
+    .sbText{font-weight:800;font-size:14px}
+    .pill{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:6px 10px;border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(42,44,50,.8);
+      color:rgba(255,255,255,.82);font-size:12px
+    }
+    .pill--green{background:rgba(34,197,94,.14);border-color:rgba(34,197,94,.25)}
+    .pill--violet{background:rgba(124,58,237,.14);border-color:rgba(124,58,237,.22)}
+    .small{font-size:12px;color:rgba(255,255,255,.62)}
+    .hr{height:1px;background:rgba(42,44,50,.75);margin:12px 0}
+
+    .main{padding:16px 16px 28px}
+    @media (min-width:980px){.main{padding:18px 26px 34px}}
+    .topbar{
+      display:flex;align-items:center;gap:12px;
+      background:rgba(18,19,21,.65);
+      border:1px solid rgba(42,44,50,.7);
+      border-radius:24px;
+      padding:14px 14px;
+      box-shadow:var(--shadow);
+    }
+    .search{
+      flex:1; display:flex; align-items:center; gap:10px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(42,44,50,.85);
+      padding:12px 14px; border-radius:16px;
+    }
+    .search input{
+      width:100%; background:transparent; border:0; outline:0;
+      color:var(--text); font-size:14px;
+    }
+    .iconBtn{
+      width:44px;height:44px;border-radius:14px;
+      display:flex;align-items:center;justify-content:center;
+      border:1px solid rgba(42,44,50,.85);
+      background:rgba(255,255,255,.04);
+      cursor:pointer;
+    }
+    .iconBtn:hover{background:rgba(255,255,255,.06)}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      padding:12px 14px;border-radius:16px;
+      border:1px solid rgba(42,44,50,.85);
+      background:rgba(255,255,255,.04);
+      cursor:pointer;
+      font-weight:900;
+      color:rgba(255,255,255,.9);
+    }
+    .btn:hover{background:rgba(255,255,255,.06)}
+    .btn--green{
+      background:rgba(34,197,94,.88);
+      border-color:rgba(255,255,255,.08);
+      color:#0b0c0e;
+    }
+    .btn--green:hover{background:rgba(34,197,94,.98)}
+
+    .userBox{display:flex;align-items:center;gap:10px}
+    .userName{font-weight:950}
+    .balance{font-weight:900;color:rgba(255,255,255,.86);font-size:13px}
+
+    .h1{margin:20px 0 10px;font-size:30px}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 12px}
+    .tab{
+      padding:10px 12px;border-radius:14px;
+      border:1px solid rgba(42,44,50,.8);
+      background:rgba(255,255,255,.03);
+      color:rgba(255,255,255,.78);
+      font-weight:900;font-size:13px;
+    }
+    .tab.active{
+      background:rgba(34,197,94,.85);
+      border-color:rgba(255,255,255,.08);
+      color:#0b0c0e;
+    }
+    .filters{display:grid;grid-template-columns:1fr;gap:10px;margin:10px 0 16px}
+    @media (min-width:980px){.filters{grid-template-columns:220px 220px 1fr}}
+    .select,.input{
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(42,44,50,.85);
+      border-radius:16px;
+      padding:12px 14px;
+      color:rgba(255,255,255,.86);
+      outline:none;
+    }
+
+    .grid{display:grid;gap:14px;grid-template-columns:repeat(2,minmax(0,1fr))}
+    @media (min-width:720px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    @media (min-width:1100px){.grid{grid-template-columns:repeat(6,minmax(0,1fr))}}
+
+    .gameCard{
+      position:relative;
+      border-radius:22px;
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border:1px solid rgba(42,44,50,.75);
+      overflow:hidden;
+      aspect-ratio:16/11;
+      box-shadow:0 10px 28px rgba(0,0,0,.35);
+      cursor:pointer;
+    }
+    .gameCard:hover{transform:translateY(-2px);transition:.14s ease;border-color:rgba(34,197,94,.22)}
+    .gcTop{
+      position:absolute;left:10px;top:10px;
+      font-size:11px;font-weight:950;
+      padding:6px 8px;border-radius:10px;
+      background:rgba(255,0,0,.85);color:#fff;
+    }
+    .gcArt{
+      width:100%;height:100%;
+      background:
+        radial-gradient(120px 120px at 20% 20%, rgba(124,58,237,.35), transparent 60%),
+        radial-gradient(220px 160px at 80% 60%, rgba(34,197,94,.18), transparent 60%),
+        rgba(0,0,0,.35);
+      display:flex;align-items:end;justify-content:space-between;
+      padding:12px;
+    }
+    .gcTitle{font-weight:1000;font-size:16px}
+    .gcTag{font-size:11px;color:rgba(255,255,255,.7);margin-top:2px}
+    .gcTrophy{
+      width:26px;height:26px;border-radius:9px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(42,44,50,.9);
+      display:flex;align-items:center;justify-content:center;
+      color:rgba(255,255,255,.75);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sbMini">
+        <div class="sbIcon">≡</div>
+        <a class="sbIcon" href="#">🎰</a>
+        <a class="sbIcon" href="#">💳</a>
+        <a class="sbIcon" href="#">🪪</a>
+        <a class="sbIcon" href="#">🧾</a>
+      </div>
+
+      <div class="sbFull">
+        <div class="brand">
+          <span class="brandMark"></span>
+          <div class="brandName"><span>V</span>ioletPlay</div>
+        </div>
+
+        <a class="sbItem active" href="#"><span class="sbIcon">🎰</span><span class="sbText">Casino</span></a>
+        <a class="sbItem" href="#"><span class="sbIcon">💳</span><span class="sbText">Wallet</span></a>
+        <a class="sbItem" href="#"><span class="sbIcon">🪪</span><span class="sbText">KYC</span></a>
+        <a class="sbItem" href="#"><span class="sbIcon">🧾</span><span class="sbText">Admin</span></a>
+        <div class="hr"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;padding:0 8px 10px">
+          <span class="pill pill--violet">IT</span>
+          <span class="pill pill--green">Sandbox</span>
+        </div>
+        <div class="small" style="padding:0 8px 12px">Demo UI (HTML/CSS only)</div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+
+      <!-- Topbar -->
+      <div class="topbar">
+        <div class="search">
+          <span style="opacity:.7">🔎</span>
+          <input id="q" placeholder="Ricerca giochi..." />
+        </div>
+        <button class="iconBtn" title="Notifiche">🔔</button>
+        <button class="iconBtn" title="Profilo">👤</button>
+        <div class="userBox">
+          <div>
+            <div class="userName">ELRONNE</div>
+            <div class="balance">0,00 €</div>
+          </div>
+        </div>
+        <button class="btn">Accedi</button>
+        <button class="btn btn--green">＋ Deposito</button>
+      </div>
+
+      <h1 class="h1">Popolare</h1>
+
+      <div class="tabs">
+        <span class="tab">Lobby</span>
+        <span class="tab">Nuovo</span>
+        <span class="tab active">Popolare</span>
+        <span class="tab">Megaways</span>
+        <span class="tab">Tornei</span>
+        <span class="tab">Hot</span>
+      </div>
+
+      <div class="filters">
+        <select class="select">
+          <option>Collezioni</option>
+          <option>Top</option>
+          <option>Nuovi</option>
+        </select>
+        <select class="select">
+          <option>Provider</option>
+          <option>Demo</option>
+        </select>
+        <input class="input" id="q2" placeholder="Ricerca..." />
+      </div>
+
+      <div id="grid" class="grid">
+        <!-- Cards (exemples) -->
+        <div class="gameCard"><div class="gcTop">TOP</div><div class="gcArt"><div><div class="gcTitle">Blackjack</div><div class="gcTag">TABLE</div></div><div class="gcTrophy">🏆</div></div></div>
+        <div class="gameCard"><div class="gcTop">TOP</div><div class="gcArt"><div><div class="gcTitle">Aviatrix</div><div class="gcTag">CRASH</div></div><div class="gcTrophy">🏆</div></div></div>
+        <div class="gameCard"><div class="gcTop">TOP</div><div class="gcArt"><div><div class="gcTitle">Plinko</div><div class="gcTag">MINI</div></div><div class="gcTrophy">🏆</div></div></div>
+        <div class="gameCard"><div class="gcTop">TOP</div><div class="gcArt"><div><div class="gcTitle">Mines</div><div class="gcTag">MINI</div></div><div class="gcTrophy">🏆</div></div></div>
+        <div class="gameCard"><div class="gcTop">TOP</div><div class="gcArt"><div><div class="gcTitle">Penalty</div><div class="gcTag">SPORT</div></div><div class="gcTrophy">🏆</div></div></div>
+        <div class="gameCard"><div class="gcTop">TOP</div><div class="gcArt"><div><div class="gcTitle">Wheel</div><div class="gcTag">MINI</div></div><div class="gcTrophy">🏆</div></div></div>
+      </div>
+
+      <div class="hr"></div>
+      <div class="small">Exemple pure HTML/CSS. Tu veux aussi la page “room” (jeu) identique ? Dis-moi et je te donne un `game.html`.</div>
+    </main>
+  </div>
+
+  <script>
+    // petit filtre front (optionnel)
+    const q = document.getElementById("q");
+    const q2 = document.getElementById("q2");
+    const cards = [...document.querySelectorAll(".gameCard")];
+    function filter(){
+      const s = (q.value + " " + q2.value).toLowerCase().trim();
+      cards.forEach(c=>{
+        const t = c.innerText.toLowerCase();
+        c.style.display = t.includes(s) ? "" : "none";
+      });
+    }
+    q.addEventListener("input", filter);
+    q2.addEventListener("input", filter);
+  </script>
+</body>
+</html>
